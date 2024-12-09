@@ -1,1 +1,0 @@
-логин - admin         пароль - password
