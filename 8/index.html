@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Форма ввода</title>
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <h1>Форма ввода</h1>
+    <form id="dataForm">
+        <label for="name">Имя:</label>
+        <input type="text" id="name" required><br>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" required><br>
+
+        <label for="age">Возраст:</label>
+        <input type="number" id="age" required><br>
+
+        <label for="specialty">Специальность:</label>
+        <input type="text" id="specialty" required><br>
+
+        <label for="experience">Стаж работы (лет):</label>
+        <input type="number" id="experience" required><br>
+
+        <button type="submit">Отправить</button>
+    </form>
+
+    <div id="message"></div>
+    <h2>Данные пользователей</h2>
+    <table id="dataTable">
+        <thead>
+            <tr>
+                <th>Имя</th>
+                <th>Email</th>
+                <th>Возраст</th>
+                <th>Специальность</th>
+                <th>Стаж работы</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Данные будут загружены сюда -->
+        </tbody>
+    </table>
+</body>
+</html>
