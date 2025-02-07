@@ -1,25 +1,39 @@
-<?php
-$host = 'localhost';
-$db = 'database_std';
-$user = 'root';
-$pass = 'root';
+<?php 
+// Определяем параметры подключения к базе данных
+$host = 'localhost'; // Адрес сервера базы данных (локальный хост)
+$db = 'database_std'; // Имя базы данных
+$user = 'root'; // Имя пользователя для подключения к базе данных
+$pass = 'root'; // Пароль для подключения к базе данных
+ 
+// Создаем новое подключение к базе данных с использованием MySQLi
+$conn = new mysqli($host, $user, $pass, $db); 
 
-$conn = new mysqli($host, $user, $pass, $db);
-if ($conn->connect_error) {
-    die("Ошибка подключения: " . $conn->connect_error);
-}
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $id = intval($_POST['id']);
-    $username = $_POST['username'];
-    $work_type = intval($_POST['work_type']);
+// Проверяем, удалось ли подключиться к базе данных
+if ($conn->connect_error) { 
+    // Если есть ошибка подключения, выводим сообщение и прекращаем выполнение скрипта
+    die("Ошибка подключения: " . $conn->connect_error); 
+} 
+ 
+// Проверяем, был ли отправлен POST-запрос
+if ($_SERVER['REQUEST_METHOD'] == 'POST') { 
+    // Извлекаем и преобразуем данные из POST-запроса
+    $id = intval($_POST['id']); // Получаем ID записи и приводим его к целочисленному типу
+    $username = $_POST['username']; // Получаем имя пользователя
+    $work_type = intval($_POST['work_type']); // Получаем тип работы и приводим его к целочисленному типу
+     
+    // Подготавливаем SQL-запрос для обновления данных в таблице std_works
+    $stmt = $conn->prepare("UPDATE std_works SET user=?, work_type=? WHERE id=?"); 
     
+    // Привязываем параметры к подготовленному запросу (s - строка, i - целое число)
+    $stmt->bind_param("sii", $username, $work_type, $id); 
     
-    $stmt = $conn->prepare("UPDATE std_works SET user=?, work_type=? WHERE id=?");
-    $stmt->bind_param("sii", $username, $work_type, $id);
-    $stmt->execute();
-    $stmt->close();
-}
-
-$conn->close();
+    // Выполняем подготовленный запрос для обновления записи
+    $stmt->execute(); 
+    
+    // Закрываем подготовленный запрос
+    $stmt->close(); 
+} 
+ 
+// Закрываем соединение с базой данных
+$conn->close(); 
 ?>
