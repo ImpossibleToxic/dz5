@@ -1,33 +1,45 @@
 <?php
 
-$host = 'localhost';
-$db = 'database_std';
-$user = 'root'; 
-$pass = 'root'; 
+// Определяем параметры подключения к базе данных
+$host = 'localhost'; // Адрес сервера базы данных (локальный хост)
+$db = 'database_std'; // Имя базы данных
+$user = 'root'; // Имя пользователя для подключения к базе данных
+$pass = 'root'; // Пароль для подключения к базе данных
 
+// Создаем новое подключение к базе данных с использованием MySQLi
 $conn = new mysqli($host, $user, $pass, $db);
+
+// Проверяем, удалось ли подключиться к базе данных
 if ($conn->connect_error) {
+    // Если есть ошибка подключения, выводим сообщение и прекращаем выполнение скрипта
     die("Ошибка подключения: " . $conn->connect_error);
 }
 
-
+// Проверяем, был ли отправлен POST-запрос
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $username = $_POST['username'];
-    $work_type = $_POST['work_type'];
+    // Получаем данные из POST-запроса
+    $username = $_POST['username']; // Имя пользователя
+    $work_type = $_POST['work_type']; // Тип работы
     
-    
-    
+    // Подготавливаем SQL-запрос для вставки данных в таблицу std_works
     $stmt = $conn->prepare("INSERT INTO std_works (user, work_type, action_date) VALUES (?, ?, NOW())");
+    
+    // Привязываем параметры к подготовленному запросу (s - строка, i - целое число)
     $stmt->bind_param("si", $username, $work_type);
+    
+    // Выполняем подготовленный запрос
     $stmt->execute();
+    
+    // Закрываем подготовленный запрос
     $stmt->close();
 }
 
-
+// Выполняем запрос для получения всех записей из таблицы std_works
 $works = $conn->query("SELECT * FROM std_works");
+
+// Выполняем запрос для получения всех записей из таблицы std_workslist
 $worktypes = $conn->query("SELECT * FROM std_workslist");
 ?>
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
